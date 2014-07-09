@@ -1,0 +1,7 @@
+name = Bulk Operations Permissions
+description = Gives the chance to hide bulk operations to some roles
+version = "7.x-1.0"
+core = "7.x"
+package = "Administration"
+
+dependencies[] = views_bulk_operations

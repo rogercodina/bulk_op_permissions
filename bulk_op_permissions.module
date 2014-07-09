@@ -1,0 +1,112 @@
+<?php
+
+/**
+ * Defines a new permission
+ *
+ * Implements hook_permission().
+ */
+function bulk_op_permissions_permission() {
+  return array(
+    'bulk assign owner' => array(
+      'title' => t('Bulk: assign owner'),
+      'restrict access' => TRUE
+    ),
+    'bulk delete item' => array(
+      'title' => t('Bulk: delete item'),
+      'restrict access' => TRUE
+    ),
+    'bulk modify action' => array(
+      'title' => t('Bulk: modify item'),
+      'restrict access' => TRUE
+    ),
+    'bulk sticky action' => array(
+      'title' => t('Bulk: sticky action'),
+      'restrict access' => TRUE
+    ),
+    'bulk unsticky action' => array(
+      'title' => t('Bulk: unsticky action'),
+      'restrict access' => TRUE
+    ),
+    'bulk promote action' => array(
+      'title' => t('Bulk: promote action'),
+      'restrict access' => TRUE
+    ),
+    'bulk publish action' => array(
+      'title' => t('Bulk: publish action'),
+      'restrict access' => TRUE
+    ),
+    'bulk unpromote action' => array(
+      'title' => t('Bulk: unpromote action'),
+      'restrict access' => TRUE
+    ),
+    'bulk unpublish action' => array(
+      'title' => t('Bulk: unpublish action'),
+      'restrict access' => TRUE
+    ),
+  );
+}
+
+/**
+ * Remove operations given permissions
+ *
+ * Implements hook_views_bulk_operations_form_alter().
+ */
+function bulk_op_permissions_views_bulk_operations_form_alter(&$form, &$form_state, $vbo) {
+
+  //In this step we are in the view and we are given the option to select an operation
+  if($form_state['step'] == 'views_form_views_form') {
+    
+    if (!user_access('bulk assign owner')) {
+      unset($form['select']['operation']['#options']['action::node_assign_owner_action']);
+    }
+
+    if (!user_access('bulk delete item')) {
+      unset($form['select']['operation']['#options']['action::views_bulk_operations_delete_item']);
+    }
+
+    if (!user_access('bulk modify action')) {
+      unset($form['select']['operation']['#options']['action::views_bulk_operations_modify_action']);
+    }
+
+    if (!user_access('bulk sticky action')) {
+      unset($form['select']['operation']['#options']['action::node_make_sticky_action']);
+    }
+
+    if (!user_access('bulk unsticky action')) {
+      unset($form['select']['operation']['#options']['action::node_make_unsticky_action']);
+    }
+
+    if (!user_access('bulk promote action')) {
+      unset($form['select']['operation']['#options']['action::node_promote_action']);
+    }
+
+    if (!user_access('bulk publish action')) {
+      unset($form['select']['operation']['#options']['action::node_publish_action']);
+    }
+
+    if (!user_access('bulk unpromote action')) {
+      unset($form['select']['operation']['#options']['action::node_unpromote_action']);
+    }
+
+    if (!user_access('bulk unpublish action')) {
+      unset($form['select']['operation']['#options']['action::node_unpublish_action']);
+    }
+  }
+}
+
+/**
+ * Some help for users
+ *
+ * Implements hook_help().
+ */
+function bulk_op_permissions_help($path, $arg) {
+  switch($path){
+    case 'admin/setting/bulk_op_permissions':
+      return 'To setup this module just go to Permision page (admin/people/permissions) and assign bulk permissions to roles which will be able to use these options';
+      break;
+    case 'admin/help#bulk_op_permissions'; 
+      $helpTxt='<p>To setup this module just go to Permision page (admin/people/permissions) and assign bulk permissions to roles which will be able to use these options</p>';
+      return $helpTxt;    
+    break;
+  }
+}
